@@ -15,5 +15,6 @@ export const url = {
     signup: `${backend}/api/user/signup`,
     signin: `${backend}/api/user/signin`,
     userdetails: `${backend}/api/user/userdetails`,
-    logout: `${backend}/api/user/logout`
+    logout: `${backend}/api/user/logout`,
+    allusers: `${backend}/api/user/allusers`
 }

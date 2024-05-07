@@ -37,7 +37,7 @@ function Header() {
                 <Logo width={60} height={60}/>
             </Link>
             
-            <div className="items-center border border-gray-300 rounded-full py-2 px-4 min-w-96 hidden md:flex">
+            <div className="items-center border border-gray-300 rounded-full py-2 px-4  min-w-96 hidden md:flex">
                 <FaSearch size={20} className='text-primary'/>
                 <input type="text" placeholder='Search products here...' className='border-none outline-none pl-3 text-gray-500'/>
             </div>
@@ -51,7 +51,7 @@ function Header() {
                     {showCollapse && user?._id && 
                         (<div className="absolute flex flex-col justify-center text-center items-center gap-2 transition-all top-14 -left-10 bg-white whitespace-nowrap min-w-32 rounded-2xl shadow-md">
                             <Link to='/profile' className='bg-rose-50 p-3 w-full text-sm text-primary font-semibold hover:text-secondary'>My Profile</Link>
-                            <Link to='/admin' className='bg-slate-50 p-3 w-full text-sm text-primary font-semibold hover:text-secondary'>Admin Panel</Link>
+                            <Link to='/admin-panel' className='bg-slate-50 p-3 w-full text-sm text-primary font-semibold hover:text-secondary'>Admin Panel</Link>
                         </div>)
                     }
                 </div>

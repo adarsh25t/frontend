@@ -1,0 +1,37 @@
+#loader {
+	width: 2rem;
+	height: 2rem;
+	position: relative;
+	border-radius: 11px;
+	animation: spin 1s ease infinite;
+	&:hover {
+		background: #396E8B;
+	}
+	&::before, &::after {
+		content: '';
+		width: 40%;
+		height: 40%;
+		display: block;
+		position: absolute;
+		border-radius: 9px;
+	}
+	&::before {
+		top: 3px;
+		left: 3px;
+		background: #77993C;
+	}
+	&::after {
+		bottom: 3px;
+		right: 3px;
+		background: #396E8B;
+	}
+}
+
+@keyframes spin {
+	from {
+		transform: rotate(135deg);
+	}
+	to {
+		transform: rotate(495deg);
+	}
+}
