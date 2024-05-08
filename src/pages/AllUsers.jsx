@@ -2,42 +2,50 @@ import React, { useEffect, useState } from 'react'
 import { url } from '../assets/images/assets'
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
 import Loading from '../components/Loading/Loading';
 import moment from 'moment/moment';
 import { FaEdit } from "react-icons/fa";
 import EdituserDetails from '../components/EdituserDetails/EdituserDetails';
-
+import { fetchallUsers, setAllUsers } from '../store/UserSlice';
+import Cookies from 'js-cookie'
+import { useNavigate } from 'react-router-dom';
 
 
 
 function AllUsers() {
 
-    const [user, setUser] = useState([]);
+    const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(false);
     const [showEdit,setShowedit] = useState(false);
     const [userId,setuserId] = useState('')
 
-    const getAllUsers = async () => {
-
-        const response = await axios.get(url.allusers, { withCredentials: true })
-        if (response.data.success) {
-            setUser(response.data.data)
-            setLoading(true);
-        }
-        else {
-            toast.error(response.data.message)
-        }
-    }
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const selector = useSelector((state) => state.user);
 
     const showeditHandler = (id) => {
-        console.log("hii",showEdit);
         setShowedit(true)
         setuserId(id)
     }
+     
 
     useEffect(() => {
-        getAllUsers()
-    }, [])
+        const tokenValue = Cookies.get();
+        console.log(tokenValue);
+
+        if (selector.status === "succeeded") {
+            setUsers(selector.allusers)
+            setLoading(true)
+        }
+        else {
+            dispatch(fetchallUsers());
+        }
+        
+
+    }, [selector.status])
+
+
 
     if (loading) {
         return (
@@ -57,7 +65,7 @@ function AllUsers() {
                             </tr>
                         </thead>
                         <tbody>
-                            {user.map((user, index) => (
+                            {users?.map((user, index) => (
                                 <tr key={index}>
                                     <td className='p-4 border-b border-blue-gray-50'>{index + 1}</td>
                                     <td className='p-4 border-b border-blue-gray-50'>{user.name}</td>

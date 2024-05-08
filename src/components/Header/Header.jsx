@@ -51,7 +51,7 @@ function Header() {
                     {showCollapse && user?._id && 
                         (<div className="absolute flex flex-col justify-center text-center items-center gap-2 transition-all top-14 -left-10 bg-white whitespace-nowrap min-w-32 rounded-2xl shadow-md">
                             <Link to='/profile' className='bg-rose-50 p-3 w-full text-sm text-primary font-semibold hover:text-secondary'>My Profile</Link>
-                            <Link to='/admin-panel' className='bg-slate-50 p-3 w-full text-sm text-primary font-semibold hover:text-secondary'>Admin Panel</Link>
+                            {user.role === 'Admin' && <Link to='/admin-panel' className='bg-slate-50 p-3 w-full text-sm text-primary font-semibold hover:text-secondary'>Admin Panel</Link>}
                         </div>)
                     }
                 </div>

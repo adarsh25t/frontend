@@ -1,10 +1,50 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Modal from 'react-modal';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateStatus } from '../../store/UserSlice';
+import axios from 'axios';
+import { url } from '../../assets/images/assets';
+import { toast } from 'react-toastify';
 
 function EdituserDetails({showEdit,setShowedit,userId}) {
     Modal.setAppElement('#root');
+
+    const [user, setUser] = useState({
+        name: '',
+        email: '',
+        role:'',
+        id:''
+    });
+
+    const dispatch = useDispatch()
+    const users = useSelector(state => state.user?.allusers);
+
+    useEffect(()=>{
+        if (users && users.length > 0) {
+            const user = users.find(user => user._id === userId);
+            setUser({
+                id: user?._id,
+                name: user?.name,
+                email: user?.email,
+                role: user?.role
+            })
+        }
+
+    },[userId])
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const response = await axios.post(url.updateuser, user, { withCredentials: true });
+        if (response.data.success) {
+            toast.success(response.data.message);
+            dispatch(updateStatus('pending'));
+            setShowedit(false)
+        }
+        else {
+            toast.error(response.data.message);
+        }
+    }
     
-    console.log(userId);
     return (
         <Modal
             isOpen={showEdit}
@@ -28,16 +68,27 @@ function EdituserDetails({showEdit,setShowedit,userId}) {
                     </div>
 
                     <div className="p-4 md:p-5 space-y-4">
-                        <input type="text" placeholder="Name" className='bg-transparent w-full border border-gray-500 p-2 rounded-lg outline-secondary focus:border-none' />
-                        <input type="text" placeholder="Email" className='bg-transparent w-full border border-gray-500 p-2 rounded-lg outline-secondary' />
-                        <select className='w-full border border-gray-500 p-2 rounded-lg bg-transparent text-gray-400 outline-secondary'>
-                            <option value="">Admin</option>
-                            <option value="">User</option>
+                        <input 
+                            type="text" 
+                            value={user?.name} 
+                            onChange={(e)=>setUser({...user,name:e.target.value})} 
+                            placeholder="Name" className='bg-transparent w-full border text-gray-400  border-gray-500 p-2 rounded-lg outline-secondary focus:border-none' 
+                        />
+                        <input 
+                            type="text" 
+                            value={user?.email} 
+                            onChange={(e)=>setUser({...user,email:e.target.value})}
+                            placeholder="Email" 
+                            className='bg-transparent w-full border text-gray-400 border-gray-500 p-2 rounded-lg outline-secondary' 
+                        />
+                        <select className='w-full border border-gray-500 p-2 rounded-lg bg-transparent text-gray-400 outline-secondary' value={user?.role} onChange={(e)=>setUser({...user,role:e.target.value})}>
+                            <option value="user">User</option>
+                            <option value="Admin">Admin</option>
                         </select>
                     </div>
 
                     <div className="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                        <button type="button" className="text-white bg-primary hover:bg-secondary focus:ring-4 focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 text-center ">Save Details</button>
+                        <button type="button" onClick={handleSubmit}  className="text-white bg-primary hover:bg-secondary focus:ring-4 focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 text-center ">Save Details</button>
                         <button onClick={()=>setShowedit(false)} type="button" className="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Cancel</button>
                     </div>
                 </div>
